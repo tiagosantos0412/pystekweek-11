@@ -6,6 +6,6 @@ class Usuarios(models.Model):
     cpf = models.CharField(max_length=11)
     telefone = models.IntegerField()
     email = models.EmailField()
-    senha = models.CharField()
+    senha = models.CharField(max_length=12)
     cliente = models.CharField(max_length=4)
     
