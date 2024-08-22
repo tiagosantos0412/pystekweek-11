@@ -1,0 +1,125 @@
+Configurações iniciais
+Primeiro devemos criar o ambiente virtual:
+	linux: python3 -m venv venv
+	windows: python -m venv venv
+
+Após a criação do venv vamos ativa-lo:
+	Ativar
+		Linux: source venv/bin/activate
+		Windows: venv\Scripts\Activate
+	Caso algum comando retorne um erro de permissão execute o código e tente novamente:
+		Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+
+Agora vamos fazer a instalação do Django e as demais bibliotecas:
+	pip install django
+	pip install pillow
+
+Vamos criar o nosso projeto Django:
+	django-admin startproject core .
+
+django-admin -> chama a ferramenta do Django
+startproject -> inicializar o prjeto com o Django
+core -> nome do projeto a ser inicializado
+. -> caminho do projeto o pronto significa (aqui)
+
+
+Rode o servidor para testar:
+	python manage.py runserver
+
+Crie o app usuarios:
+	python manage.py startapp usuarios
+
+Agora vamos definir as URL's e as rotas da nossa aplicação
+	Vá ate o arquivo urls.py  na linha from django.urls import path insira include (from django.urls import path, include)
+	Na função urlpatterns = [] crie um novo path para que a nova url tenha acesso ao app usuarios
+
+	urlpatterns = [
+		path('admin/', admin.site.urls),
+		path('usuarios/', include('usuarios.url'))
+	]
+
+Na aplicação usuarios crie um novo arquivo chamado urls.py
+	Neste novo arquivo urls.py faça as seguintes importações:
+
+from django.urls import path
+	path -> função responsável por criar novas rotas na aplicação
+
+agora crie uma função urlpatterns = [] para identificar as rotas criadas:
+	urlpatterns = [
+		path('cadastrar/', views.cadastrar)
+	]
+Por convenção uma url precisa me apontar para um arquivo de views.py, ou seja ao acessar a url final, o usuário
+será direcionado para funções py, e estes arquivos por padronização e organização ficam armazenados no arquivo views.py
+
+Agora precisamos importar este arquivo
+from . import views
+
+Se rodarmos a aplicação agora o sistema apresentará um erro, pois no arquivo views.py não existe a função cadastrar.
+
+Vamos criar a função cadastrar no arquivo views.py
+	def cadastrar(request):
+O request, significa que a função vai receber como parâmetro uma requisição do usuário.
+
+Faça também o import from django.http import HttpResponse para que a função retorne uma resposta http para o usuário.
+ficando assim:
+	def cadastrar(request):
+		return HttpResponse('Olá mundo!')
+Nesta parte finalizamos o fluxo mais básico do django:
+	1 - Esta requisição chegou no django pelo arquivo urls.py do core do projeto.
+	2 - O django vai procurar a url/usuarios, esta url existe dentro de urlpatterns?
+	3 - Sim ela existe, agora o que esta url faz? Ela vai nos redirecionar para mais um conjunto de urls.
+	4 - Agora vamos verificar se a ulr cadastrar existe em urlpatterns no arquivo urls.py da aplicação usuários.
+	5 - Sim esta url existe, o que esta url faz? Ela chama uma função python que está em views e se chama cadastrar.
+	6 - Agora em views.py existe a função cadastrar? Sim, esta função recebe a requisição do usuário e devolve uma resposta http escrito Olá Mundo.
+
+Agora vamos na pasta templates criar dois arquivos o cadastrar.html e o login.html
+	Na pagina cadastrar.html vamos criar um formulário como no exemplo abaixo:
+		<h2>Cadastro de Usuários</h2>
+		<form action="{% url 'cadastrar' %}" method="POST">
+			{% csrf_token %} 
+			<div class="input-group">
+				<label for="nome">Nome</label>
+				<input type="text" id="nome" name="nome" required>
+			</div>
+			<div class="input-group">
+				<label for="cpf">Cpf</label>
+				<input type="text" id="cpf" name="cpf" required>
+			</div>
+			<div class="input-group">
+				<label for="telefone">Telefone</label>
+				<input type="text" id="telefone" name="telefone" required>
+			</div>
+			<div class="input-group">
+				<label for="email">Email</label>
+				<input type="email" id="email" name="email" required>
+			</div>
+			<div class="input-group">
+				<label for="senha">Senha</label>
+				<input type="password" id="senha" name="senha" required>
+			</div>
+			<button type="submit" class="button">Cadastrar</button>
+		</form>
+		<div class="message">
+			Já tem uma conta? <a href="{% url 'login' %}">Entre aqui</a>
+		</div>
+	Devemos criar este campo {% csrf_token %} para que o django crie um hash que protegerá nosso formulário contra falsificações
+Na views na função cadastrar vamos inserir duas verificações uma para que se a requisição for GET, ele renderiza a pagina de Cadastro
+E se a requisição for POST, vamos capturar e printar estas variáveis.
+	def cadastrar(request):
+	if request.method == "GET":
+		return render(request, 'cadastrar.html')
+	elif request.method == "POST":
+		nome = request.POST.get('nome')
+		cpf = request.POST.get('cpf')
+		telefone = request.POST.get('telefone')
+		email = request.POST.get('email')
+		senha = request.POST.get('senha')
+		print(nome, cpf, telefone, email, senha)
+		return HttpResponse('Usário cadastrado com sucesso')		
+Agora vamos cadastrar as informaçções capturadas das variáveis no banco de dados, através das models:
+	No arquivo models.py crie uma classe com o nome Usuarios:
+		class Usuarios(models.Model):
+		Para que esta classe seja considerada uma representação de uma tabela em um  banco de dados ela precisa herdar de models.Model
+			Esta classe terá os seguintes atributos que serão as colunas da tabela:
+				nome, cpf, telefone, email, senha, cliente.
+				

@@ -1,0 +1,81 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C Extensions
+*.so
+
+# Django stuff:
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+*.env
+
+# Django migrations
+**/migrations/*
+!**/migrations/__init__.py
+
+# Environment variables
+.env
+
+# Environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+*~
+
+# Logs and databases
+*.log
+*.sqlite3
+
+# Static files
+staticfiles/
+
+# Media files
+media/
+
+# Local cache files
+*.tmp
+*.temp
+*.pid
+*.tar.gz
+*.zip
+
+# Test coverage reports
+htmlcov/
+.tox/
+.coverage
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# Unit test / coverage reports
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
