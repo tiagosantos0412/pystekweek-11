@@ -122,4 +122,143 @@ Agora vamos cadastrar as informaçções capturadas das variáveis no banco de d
 		Para que esta classe seja considerada uma representação de uma tabela em um  banco de dados ela precisa herdar de models.Model
 			Esta classe terá os seguintes atributos que serão as colunas da tabela:
 				nome, cpf, telefone, email, senha, cliente.
-				
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
+Vou detalhar cada parte da aplicação Django com base no que construímos até agora, desde a configuração inicial até as funcionalidades de login e exibição de informações do usuário.
+
+1. settings.py - Configurações Gerais do Projeto
+import os, from pathlib import Path, from decouple import config:
+
+os, Path: Usados para definir caminhos de arquivos e diretórios no sistema.
+decouple: Facilita o uso de variáveis de ambiente, como chaves secretas e credenciais de banco de dados.
+BASE_DIR = Path(__file__).resolve().parent.parent:
+
+Define o diretório base do projeto, permitindo a criação de caminhos relativos.
+STATIC_URL = '/static/':
+
+Define a URL para os arquivos estáticos, como CSS e JavaScript.
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]:
+
+Indica onde os arquivos estáticos do projeto estão localizados.
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles"):
+
+Especifica o diretório onde os arquivos estáticos serão coletados para produção.
+SECRET_KEY = config('SECRET_KEY'):
+
+Carrega a chave secreta do projeto de uma variável de ambiente.
+DEBUG = True:
+
+Define se o modo de depuração está ativado. Deve ser False em produção.
+ALLOWED_HOSTS = []:
+
+Lista de domínios ou IPs que podem acessar o projeto.
+INSTALLED_APPS:
+
+Lista dos aplicativos e bibliotecas instalados, incluindo usuarios.
+MIDDLEWARE:
+
+Lista de middleware que processam as requisições e respostas do projeto.
+ROOT_URLCONF = 'core.urls':
+
+Define o arquivo principal de URLs do projeto.
+TEMPLATES:
+
+Configura os diretórios e opções para templates HTML.
+WSGI_APPLICATION = 'core.wsgi.application':
+
+Define o ponto de entrada WSGI para o projeto, usado em servidores.
+DATABASES:
+
+Configura a conexão com o banco de dados. Neste caso, MySQL com credenciais e detalhes definidos nas variáveis de ambiente.
+AUTH_PASSWORD_VALIDATORS:
+
+Lista de validadores de senha, usados para impor políticas de segurança de senha.
+LANGUAGE_CODE = 'pt-br' e TIME_ZONE = 'America/Sao_Paulo':
+
+Define o idioma e fuso horário padrão do projeto.
+USE_I18N, USE_TZ:
+
+Ativa internacionalização e o uso de fuso horário.
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField':
+
+Define o tipo de campo padrão para chaves primárias.
+2. urls.py - Configuração de URLs
+Arquivo core/urls.py
+from django.contrib import admin, from django.urls import path, include:
+
+Importa funções necessárias para definir as rotas.
+urlpatterns = [...]:
+
+Define as rotas principais do projeto, incluindo:
+admin/: Acesso ao painel de administração do Django.
+usuarios/: Inclui as rotas do app usuarios.
+login/: Também aponta para as rotas de usuarios.
+Arquivo usuarios/urls.py
+from django.urls import path e from . import views:
+
+Importa funções para definir as rotas do app usuarios.
+urlpatterns = [...]:
+
+Define as rotas do app usuarios:
+login/: Exibe a página de login.
+cadastrar/: Exibe o formulário de cadastro.
+home/: Página inicial após o login.
+3. models.py - Definição do Modelo
+from django.db import models:
+
+Importa as funcionalidades para criar modelos de banco de dados.
+class Usuarios(models.Model)::
+
+Define um modelo de banco de dados chamado Usuarios com os seguintes campos:
+nome: Campo de texto para armazenar o nome do usuário.
+cpf: Campo de texto para armazenar o CPF.
+telefone: Campo de texto para armazenar o telefone.
+email: Campo de email.
+senha: Campo de texto para armazenar a senha, que será criptografada.
+cliente: Campo de texto para armazenar se o usuário é cliente ou não.
+4. views.py - Lógica das Views
+from django.shortcuts import render, redirect:
+
+Funções para renderizar templates HTML e redirecionar entre páginas.
+from django.http import HttpResponse:
+
+Usado para retornar respostas HTTP simples.
+from .models import Usuarios:
+
+Importa o modelo Usuarios para interagir com o banco de dados.
+from django.contrib.auth.hashers import make_password, check_password:
+
+Funções para criptografar e verificar senhas.
+View cadastrar:
+
+Renderiza o formulário de cadastro.
+Se a requisição for POST, coleta os dados do formulário, cria um novo usuário com senha criptografada, e salva no banco de dados.
+Após o cadastro, redireciona para a página de login.
+View login_view:
+
+Renderiza o formulário de login.
+Se a requisição for POST, verifica o CPF e senha do usuário.
+Se as credenciais forem válidas, salva o ID do usuário na sessão e redireciona para a página inicial.
+Se as credenciais forem inválidas, retorna uma mensagem de erro.
+View home:
+
+Exibe uma saudação personalizada ao usuário logado, mostrando também informações como CPF e telefone.
+Busca o ID do usuário salvo na sessão para carregar suas informações do banco de dados.
+5. Templates HTML - Estrutura e Estilo das Páginas
+cadastrar.html
+Estrutura básica do formulário de cadastro com campos para nome, CPF, telefone, email, senha, e uma opção de radio para verificar se o usuário já é cliente.
+login.html
+Estrutura básica do formulário de login com campos para CPF e senha.
+home.html
+Página de boas-vindas que exibe o nome do usuário logado e algumas informações adicionais.
+6. Migrations e Testes
+Migrations:
+
+python manage.py makemigrations: Cria as migrações com base no modelo Usuarios.
+python manage.py migrate: Aplica as migrações, criando a tabela no banco de dados.
+Testes:
+
+python manage.py runserver: Inicia o servidor de desenvolvimento para testar a aplicação.
+Resumo Geral
+A aplicação é um sistema de login e cadastro básico, onde os usuários podem se cadastrar, fazer login e serem recebidos com uma saudação personalizada após o login. Toda a lógica para criptografia de senhas, validação de login e recuperação de informações do banco de dados foi implementada para garantir a segurança e integridade dos dados dos usuários.
