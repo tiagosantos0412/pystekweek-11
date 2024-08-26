@@ -2,9 +2,24 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Usuarios
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import check_password
 # Create your views here.
 
 def login(request):
+    if request.method == 'POST':
+        cpf = request.POST['cpf']
+        senha = request.POST['senha']
+        try:
+            usuario = Usuarios.objects.get(cpf=cpf)
+            if check_password(senha, usuario.senha):
+                # Armazena o ID do usuário na sessão
+                request.session['usuario_id'] = usuario.id
+                # Redireciona para a página de boas vindas
+                return redirect('home')
+            else:
+                return HttpResponse('CPF ou senha incorretos!')
+        except Usuarios.DoesNotExist:
+            return HttpResponse('Usuário não encontrado!')
     return render(request, 'login.html')
 
 def cadastrar(request):
@@ -22,4 +37,18 @@ def cadastrar(request):
 
         return HttpResponse('Usuário cadastrado com sucesso')
     return render(request, 'cadastrar.html')
+
+def home(request):
+    # Recupera o id do início da sessão
+    usuario_id = request.session.get('usuario_id')
+    if usuario_id:
+        usuario = Usuarios.objects.get(id=usuario_id)
+        # Retorna a página de boas-vindas com os dados do usuário
+        return render(request, 'home.html', {
+            'nome': usuario.nome,
+            'cpf': usuario.cpf,
+            'telefone': usuario.telefone
+        })
+    else:
+        return redirect('login')
 
