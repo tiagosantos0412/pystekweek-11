@@ -19,6 +19,6 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('usuarios/', include('usuarios.urls')),  # Inclui as rotas do app 'usuarios'
-    path('login/', include('usuarios.urls'))  # Inclui as rotas para login
+    path('usuarios/', include('usuarios.urls')),
+    path('', include('usuarios.urls')),  # Inclui a rota raiz para redirecionamento ao login
 ]

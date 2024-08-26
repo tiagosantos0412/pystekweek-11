@@ -91,7 +91,7 @@
 <body>
     <div class="container">
         <h2>Consulta de Processos</h2>
-        <form action="/login" method="POST">
+        <form action="/login/" method="POST"> {% csrf_token %}
             <div class="input-group">
                 <label for="cpf">Cpf</label>
                 <input type="text" id="cpf" name="cpf" required>

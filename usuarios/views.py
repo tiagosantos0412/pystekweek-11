@@ -3,7 +3,11 @@ from django.http import HttpResponse
 from .models import Usuarios
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password
+from django.contrib import messages
 # Create your views here.
+
+def redirect_to_login(request):
+    return redirect('login')
 
 def login(request):
     if request.method == 'POST':
@@ -34,9 +38,10 @@ def cadastrar(request):
         # Criação do usuário
         usuario = Usuarios(nome=nome, cpf=cpf, telefone=telefone, email=email, senha=senha, cliente=cliente)
         usuario.save()
-
-        return HttpResponse('Usuário cadastrado com sucesso')
+        messages.success(request, 'Usuário cadastrado com sucesso')
+        return redirect('login')
     return render(request, 'cadastrar.html')
+
 
 def home(request):
     # Recupera o id do início da sessão
