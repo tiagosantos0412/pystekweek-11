@@ -9,5 +9,10 @@
     <h1>Bem-vindo, {{ nome }}!</h1>
     <p>CPF: {{ cpf }}</p>
     <p>Telefone: {{ telefone }}</p>
+
+    <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit">Sair</button>
+    </form>
 </body>
 </html>

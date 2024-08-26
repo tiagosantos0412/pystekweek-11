@@ -4,6 +4,7 @@ from .models import Usuarios
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password
 from django.contrib import messages
+from django.contrib.auth import logout as auth_logout
 # Create your views here.
 
 def redirect_to_login(request):
@@ -38,7 +39,7 @@ def cadastrar(request):
         # Criação do usuário
         usuario = Usuarios(nome=nome, cpf=cpf, telefone=telefone, email=email, senha=senha, cliente=cliente)
         usuario.save()
-        messages.success(request, 'Usuário cadastrado com sucesso')
+        messages.success(request, 'Usuário cadastrado com sucesso!')
         return redirect('login')
     return render(request, 'cadastrar.html')
 
@@ -56,4 +57,9 @@ def home(request):
         })
     else:
         return redirect('login')
+    
+
+def logout(request):
+    auth_logout(request)
+    return redirect('login')
 
