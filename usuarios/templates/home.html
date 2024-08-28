@@ -1,14 +1,25 @@
-<!-- home.html -->
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Bem-vindo</title>
+    <title>Bem-vindo(a) a Limpe Fácil Soluções Finceiras</title>
 </head>
 <body>
-    <h1>Bem-vindo, {{ nome }}!</h1>
-    <p>CPF: {{ cpf }}</p>
-    <p>Telefone: {{ telefone }}</p>
+    {% if error %}
+        <p>{{ error }}</p>
+    {% else %}
+        <div class='container'>
+            <p>Nome: {{ nome }}</p>
+            <p>Celular: {{ celular_1 }}</p>
+            <p>Valor: {{ valor }}</p>
+            <p>Link: <a href="{{ link }}" target="_blank">Clique aqui para ver o processo</a></p>
+            <p>TJ: {{ tj }}</p>
+            <p>Tipo: {{ tipo }}</p>
+            <p>Processo: {{ processo }}</p>
+            <p>Data do Processo: {{ data_do_processo }}</p>
+            <p>Credor: {{ credor|default:"Não informado" }}</p>
+        </div>
+    {% endif %}
 
     <form method="post" action="{% url 'logout' %}">
         {% csrf_token %}

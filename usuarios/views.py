@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from .models import Usuarios
+from django.http import HttpResponse, JsonResponse
+from .models import Usuarios, Clientes
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password
 from django.contrib import messages
@@ -27,6 +27,7 @@ def login(request):
             return HttpResponse('Usuário não encontrado!')
     return render(request, 'login.html')
 
+
 def cadastrar(request):
     if request.method == "POST":
         nome = request.POST.get('nome')
@@ -45,19 +46,32 @@ def cadastrar(request):
 
 
 def home(request):
-    # Recupera o id do início da sessão
     usuario_id = request.session.get('usuario_id')
-    if usuario_id:
-        usuario = Usuarios.objects.get(id=usuario_id)
-        # Retorna a página de boas-vindas com os dados do usuário
-        return render(request, 'home.html', {
-            'nome': usuario.nome,
-            'cpf': usuario.cpf,
-            'telefone': usuario.telefone
-        })
-    else:
+    if not usuario_id:
         return redirect('login')
     
+    try:
+        usuario = Usuarios.objects.get(id=usuario_id)
+        cliente = Clientes.objects.get(cpf_cnpj=usuario.cpf)
+        
+        # Dados do cliente passados para o contexto
+        context = {
+            'nome': cliente.nome,
+            'celular_1': cliente.celular_1,
+            'valor': cliente.valor,
+            'link': cliente.link,
+            'tj': cliente.tj,
+            'tipo': cliente.tipo,
+            'processo': cliente.processo,
+            'data_do_processo': cliente.data_do_processo,
+            'credor': cliente.credor,
+        }
+        return render(request, 'home.html', context)
+    except Usuarios.DoesNotExist:
+        return redirect('login')
+    except Clientes.DoesNotExist:
+        return render(request, 'home.html', {'error': 'Dados do cliente não encontrados'})
+
 
 def logout(request):
     auth_logout(request)
