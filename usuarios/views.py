@@ -54,6 +54,10 @@ def home(request):
         usuario = Usuarios.objects.get(id=usuario_id)
         cliente = Clientes.objects.get(cpf_cnpj=usuario.cpf)
         
+        # Formatação da data_do_processo para dd/mm/yyyy
+        data_do_processo = cliente.data_do_processo.split(" ")[0]  # Pega apenas a parte da data (yyyy-mm-dd)
+        data_do_processo_formatada = data_do_processo[8:10] + '/' + data_do_processo[5:7] + '/' + data_do_processo[0:4]  # Formata para dd/mm/yyyy
+
         # Dados do cliente passados para o contexto
         context = {
             'nome': cliente.nome,
@@ -63,7 +67,7 @@ def home(request):
             'tj': cliente.tj,
             'tipo': cliente.tipo,
             'processo': cliente.processo,
-            'data_do_processo': cliente.data_do_processo,
+            'data_do_processo': data_do_processo_formatada,  # Data formatada
             'credor': cliente.credor,
         }
         return render(request, 'home.html', context)

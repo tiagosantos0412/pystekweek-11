@@ -44,7 +44,6 @@ input[type="password"] {
 
 .radio-group {
     display: flex;
-    justify-content: space-between;
     margin-top: 10px;
 }
 
@@ -67,4 +66,20 @@ button:hover {
     text-align: center;
     margin-top: 15px;
     display: none;
+}
+
+.message {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+    color: #555;
+}
+
+.message a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.message a:hover {
+    text-decoration: underline;
 }

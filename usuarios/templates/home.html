@@ -1,29 +1,34 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static '../static/css/home.css' %}">
     <title>Bem-vindo(a) a Limpe Fácil Soluções Finceiras</title>
 </head>
 <body>
     {% if error %}
         <p>{{ error }}</p>
-    {% else %}
-        <div class='container'>
-            <p>Nome: {{ nome }}</p>
-            <p>Celular: {{ celular_1 }}</p>
-            <p>Valor: {{ valor }}</p>
-            <p>Link: <a href="{{ link }}" target="_blank">Clique aqui para ver o processo</a></p>
-            <p>TJ: {{ tj }}</p>
-            <p>Tipo: {{ tipo }}</p>
-            <p>Processo: {{ processo }}</p>
-            <p>Data do Processo: {{ data_do_processo }}</p>
-            <p>Credor: {{ credor|default:"Não informado" }}</p>
+    {% else %} 
+        <div class='container card'>
+            <img src="{% static '../static/img/logo_limpe_facil.png' %}" class='logo' alt="Minha imagem de teste">
+            <h1 class='titulo'>Sistema de consulta de processos</h1>
+            {% comment %} <h2 class='subtitulo'>Limpe Fácil Soluções Financeiras</h2> {% endcomment %}
+            <div class='nome card-item'><span>Citado</span>: {{ nome }}</div>
+            <div class='celular card-item'><span>Celular</span>: {{ celular_1 }}</div>
+            <div class='valor card-item'><span>Valor</span>: {{ valor }}</div>
+            <div class='link card-item'><span></span> <a href="{{ link }}" target="_blank">Clique aqui para ver a capa do seu processo</a></div>
+            <div class='tj card-item'><span>TJ</span>: {{ tj }}</div>
+            <div class='tipo card-item'><span>Tipo</span>: {{ tipo }}</div>
+            <div class='processo card-item'><span>Nº do Processo</span>: {{ processo }}</div>
+            <div class='data card-item'><span>Data do Processo</span>: {{ data_do_processo }}</div>
+            <div class='credor card-item'><span>Credor</span>: {{ credor|default:"Não informado" }}</div>
         </div>
     {% endif %}
 
-    <form method="post" action="{% url 'logout' %}">
+    <form class='sair' method="post" action="{% url 'logout' %}">
         {% csrf_token %}
-        <button type="submit">Sair</button>
+        <button type="submit" class='card__button'>Sair</button>
     </form>
 </body>
 </html>

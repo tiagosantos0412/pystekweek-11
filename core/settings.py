@@ -20,12 +20,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 STATIC_URL = '/static/'
 
-# Diretório onde os arquivos estáticos estão localizados no seu projeto
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+# Isso define onde os arquivos estáticos serão armazenados após a coleta
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 
-# Diretório para onde os arquivos estáticos serão coletados (necessário em produção)
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-
+# Isso define o caminho para a pasta onde os arquivos estáticos serão coletados
+STATIC_ROOT = BASE_DIR / "staticfiles"
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
