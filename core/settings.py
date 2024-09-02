@@ -137,3 +137,11 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'mail.limpefacilsolucoes.com.br'
+EMAIL_PORT = 465
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'comercial@limpefacilsolucoes.com.br'
+EMAIL_HOST_PASSWORD = 'w1J1AeMwY9AFK73W'
+DEFAULT_FROM_EMAIL = 'comercial@limpefacilsolucoes.com.br'

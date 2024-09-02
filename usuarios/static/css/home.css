@@ -27,11 +27,11 @@ span{
 
 .logo {
     padding: 5px;
-    width: 250px;
-    height: 200px;
+    width: 230px;
+    height: 180px;
     position: fixed; /* Fixa a logo no canto esquerdo da tela */
     top: 10px;
-    left: 10px;
+    left: 30px;
 }
 
 .titulo,
